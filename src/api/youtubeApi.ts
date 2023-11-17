@@ -1,20 +1,18 @@
-async function youtubeApi() {
-
- 
- const client = gapi.client.init({
-    apiKey: "YOUR_API_KEY",
-    // clientId and scope are optional if auth is not required.
-    // clientId: "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com",
-    // scope: "profile",
-  });
+// require("https://apis.google.com/js/api.js");
+export default () => {
 
   const start = () => {
     // 2. Initialize the JavaScript client library.
-    client
+   gapi.client.init({
+      apiKey: "AIzaSyDQXUnuDv9p-wXDHPtUbc1o49OLSR7ciFo",
+      // clientId and scope are optional if auth is not required.
+      // clientId: "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com",
+      // scope: "profile",
+    })
       .then(function () {
         // 3. Initialize and make the API request.
         return gapi.client.request({
-          path: "https://people.googleapis.com/v3/people/me?requestMask.includeField=person.names",
+          path: "https://www.googleapis.com/youtube/v3/videos?id=7lCDEYXw3mM&part=snippet,contentDetails,statistics,status",
         });
       })
       .then(
@@ -28,5 +26,4 @@ async function youtubeApi() {
   };
   // 1. Load the JavaScript client library.
   gapi.load("client", start);
-  return start;
 }
