@@ -47,6 +47,20 @@ export default function Player(room: any) {
     setProgressTime(msg.currentTimePercentage);
   });
 
+  socket.on("update-video", (msg: playerMessage) => {
+    playerEvent.target.loadVideoById(msg.currentVideo);
+    playerEvent.target.seekTo(
+      getCurrentTime(
+        playerEvent.target.getDuration(),
+        msg.currentTimePercentage
+      )
+    );
+    playerEvent.target.playVideo();
+    playing = true;
+    setProgressTime(msg.currentTimePercentage);
+    progressTimer();
+  });
+
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     playerEvent = event;
     playerEvent.target.pauseVideo();
@@ -78,6 +92,8 @@ export default function Player(room: any) {
     playerEvent.target.setVolume(volume);
   };
   const onProgressChange = (e: any) => {
+    playing = false;
+    playerEvent.target.pauseVideo();
     setProgressTime(e.target.value);
   };
   const progressTimer = () => {
@@ -96,7 +112,9 @@ export default function Player(room: any) {
     let message: playerMessage = {
       roomId: room.room,
       currentTimePercentage: progressTime,
+      action: playerAction.Play,
     };
+    socket.emit("playerState-change", message);
     socket.emit("playerProgress-change", message);
   };
   const onVideoEnd = () => {

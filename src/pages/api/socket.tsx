@@ -11,7 +11,7 @@ const SocketHandler = (req:any, res:any) => {
 
     io.on('connection', socket => {
       socket.on('joinRoom', (msg:string) => {
-        console.log('joining room' + msg)
+        console.log('joining room ' + msg)
         socket.join(msg)
 
       })
@@ -20,6 +20,9 @@ const SocketHandler = (req:any, res:any) => {
       })
       socket.on('playerProgress-change', (msg:playerMessage) => {
         io.to(msg.roomId).emit('update-playerProgress', msg)
+      })
+      socket.on('video-change', (msg:playerMessage) => {
+        io.to(msg.roomId).emit('update-video', msg)
       })
     })
   }
