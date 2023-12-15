@@ -1,4 +1,3 @@
-import { playerMessage } from '@/src/interfaces/playerMessages'
 import { Server } from 'socket.io'
 
 const SocketHandler = (req:any, res:any) => {

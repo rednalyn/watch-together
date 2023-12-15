@@ -1,5 +1,4 @@
 import { io } from "socket.io-client";
-import { playerAction, playerMessage } from "../interfaces/playerMessages";
 let socket: any;
 
 fetch("/api/socket");

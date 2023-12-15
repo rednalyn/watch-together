@@ -2,12 +2,8 @@
 // ts
 import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
-import { playerAction, playerMessage } from "../interfaces/playerMessages";
-import { useSearchParams } from "next/navigation";
+import {  useState } from "react";
 import socket from "@/src/api/socketApi";
-// let socket: any;
 let playing: boolean = false;
 let volume: number = 10;
 let playerEvent: YouTubeEvent<any>;
