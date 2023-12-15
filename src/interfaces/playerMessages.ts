@@ -1,8 +1,9 @@
-export enum playerAction{
-    Play="Play",
-    Pause="Pause",
+export enum playerAction {
+  Play = "Play",
+  Pause = "Pause",
 }
-export interface playerMessages{
-    action:playerAction,
-    currentTime:number,
+export interface playerMessage {
+  action?: playerAction;
+  currentTimePercentage: number;
+  currentVideo?: string;
 }

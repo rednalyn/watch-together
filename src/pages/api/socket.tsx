@@ -1,4 +1,4 @@
-import { playerMessages } from '@/src/interfaces/playerMessages'
+import { playerMessage } from '@/src/interfaces/playerMessages'
 import { Server } from 'socket.io'
 
 const SocketHandler = (req:any, res:any) => {
@@ -10,8 +10,11 @@ const SocketHandler = (req:any, res:any) => {
     res.socket.server.io = io
 
     io.on('connection', socket => {
-      socket.on('input-change', (msg:playerMessages) => {
-        socket.broadcast.emit('update-input', msg)
+      socket.on('playerState-change', (msg:playerMessage) => {
+        socket.broadcast.emit('update-playerState', msg)
+      })
+      socket.on('playerProgress-change', (msg:playerMessage) => {
+        socket.broadcast.emit('update-playerProgress', msg)
       })
     })
   }
