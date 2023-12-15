@@ -11,7 +11,7 @@ const searchByValue = async (searchTerm: string) => {
     const searchResponse = await youtube.search.list({
       part: ['id', 'snippet'],
       q: searchTerm, 
-      maxResults: 25,
+      maxResults: 5,
     });
     if (searchResponse.status != 200) {
       console.log("Something went wrong, status: " + searchResponse.status + " statustext: " + searchResponse.statusText);
