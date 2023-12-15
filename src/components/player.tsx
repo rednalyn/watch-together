@@ -5,7 +5,6 @@ import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
-import useCurrentTime from "../hooks/useCurrentTime";
 
 let socket: any;
 let playing: boolean = false;
@@ -27,7 +26,7 @@ export default function Player(videoCode: any) {
       if (msg.action == playerAction.Pause) {
         playerEvent.target.pauseVideo();
         playerEvent.target.seekTo(
-          useCurrentTime(
+          getCurrentTime(
             playerEvent.target.getDuration(),
             msg.currentTimePercentage
           )
@@ -37,7 +36,7 @@ export default function Player(videoCode: any) {
       } else if (msg.action == playerAction.Play) {
         playerEvent.target.playVideo();
         playerEvent.target.seekTo(
-          useCurrentTime(
+          getCurrentTime(
             playerEvent.target.getDuration(),
             msg.currentTimePercentage
           )
@@ -50,7 +49,7 @@ export default function Player(videoCode: any) {
     socket.on("update-playerProgress", (msg: playerMessage) => {
       console.log(msg.currentTimePercentage);
       playerEvent.target.seekTo(
-        useCurrentTime(
+        getCurrentTime(
           playerEvent.target.getDuration(),
           msg.currentTimePercentage
         )
@@ -80,6 +79,9 @@ export default function Player(videoCode: any) {
       socket.emit("playerState-change", message);
     }
   };
+  const getCurrentTime = (duration:number, progressPercentage:number) => {
+      return duration*(progressPercentage/100);
+  }
   const onVolumeChange = (e: any) => {
     volume = e.target.value;
     playerEvent.target.setVolume(volume);
