@@ -3,6 +3,7 @@ export enum playerAction {
   Pause = "Pause",
 }
 export interface playerMessage {
+  roomId: string;
   action?: playerAction;
   currentTimePercentage: number;
   currentVideo?: string;

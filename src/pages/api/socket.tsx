@@ -10,11 +10,16 @@ const SocketHandler = (req:any, res:any) => {
     res.socket.server.io = io
 
     io.on('connection', socket => {
+      socket.on('joinRoom', (msg:string) => {
+        console.log('joining room' + msg)
+        socket.join(msg)
+
+      })
       socket.on('playerState-change', (msg:playerMessage) => {
-        socket.broadcast.emit('update-playerState', msg)
+        io.to(msg.roomId).emit('update-playerState', msg)
       })
       socket.on('playerProgress-change', (msg:playerMessage) => {
-        socket.broadcast.emit('update-playerProgress', msg)
+        io.to(msg.roomId).emit('update-playerProgress', msg)
       })
     })
   }

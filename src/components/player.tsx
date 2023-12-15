@@ -5,58 +5,48 @@ import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
-
-let socket: any;
+import { useSearchParams } from "next/navigation";
+import socket from "@/src/api/socketApi";
+// let socket: any;
 let playing: boolean = false;
 let volume: number = 10;
 let playerEvent: YouTubeEvent<any>;
-export default function Player(videoCode: any) {
+export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
-
-  useEffect(() => {
-    socketInitializer();
-  }, []);
-
-  const socketInitializer = async () => {
-    await fetch("/api/socket");
-    socket = io();
-
-    socket.on("connect", () => {});
-    socket.on("update-playerState", (msg: playerMessage) => {
-      if (msg.action == playerAction.Pause) {
-        playerEvent.target.pauseVideo();
-        playerEvent.target.seekTo(
-          getCurrentTime(
-            playerEvent.target.getDuration(),
-            msg.currentTimePercentage
-          )
-        );
-        playing = false;
-        setProgressTime(msg.currentTimePercentage);
-      } else if (msg.action == playerAction.Play) {
-        playerEvent.target.playVideo();
-        playerEvent.target.seekTo(
-          getCurrentTime(
-            playerEvent.target.getDuration(),
-            msg.currentTimePercentage
-          )
-        );
-        playing = true;
-        setProgressTime(msg.currentTimePercentage);
-        progressTimer();
-      }
-    });
-    socket.on("update-playerProgress", (msg: playerMessage) => {
-      console.log(msg.currentTimePercentage);
+  socket.on("update-playerState", (msg: playerMessage) => {
+    if (msg.action == playerAction.Pause) {
+      playerEvent.target.pauseVideo();
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
           msg.currentTimePercentage
         )
       );
+      playing = false;
       setProgressTime(msg.currentTimePercentage);
-    });
-  };
+    } else if (msg.action == playerAction.Play) {
+      playerEvent.target.playVideo();
+      playerEvent.target.seekTo(
+        getCurrentTime(
+          playerEvent.target.getDuration(),
+          msg.currentTimePercentage
+        )
+      );
+      playing = true;
+      setProgressTime(msg.currentTimePercentage);
+      progressTimer();
+    }
+  });
+  socket.on("update-playerProgress", (msg: playerMessage) => {
+    playerEvent.target.seekTo(
+      getCurrentTime(
+        playerEvent.target.getDuration(),
+        msg.currentTimePercentage
+      )
+    );
+    setProgressTime(msg.currentTimePercentage);
+  });
+
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     playerEvent = event;
     playerEvent.target.pauseVideo();
@@ -69,6 +59,7 @@ export default function Player(videoCode: any) {
 
   const playPause = () => {
     let message: playerMessage = {
+      roomId: room.room,
       currentTimePercentage: progressTime,
     };
     if (playing) {
@@ -79,9 +70,9 @@ export default function Player(videoCode: any) {
       socket.emit("playerState-change", message);
     }
   };
-  const getCurrentTime = (duration:number, progressPercentage:number) => {
-      return duration*(progressPercentage/100);
-  }
+  const getCurrentTime = (duration: number, progressPercentage: number) => {
+    return duration * (progressPercentage / 100);
+  };
   const onVolumeChange = (e: any) => {
     volume = e.target.value;
     playerEvent.target.setVolume(volume);
@@ -91,9 +82,10 @@ export default function Player(videoCode: any) {
   };
   const progressTimer = () => {
     let interval = setInterval(() => {
-      console.log(playerEvent.target.getCurrentTime()/ playerEvent.target.getDuration())
       setProgressTime(
-         (playerEvent.target.getCurrentTime()/ playerEvent.target.getDuration())*100
+        (playerEvent.target.getCurrentTime() /
+          playerEvent.target.getDuration()) *
+          100
       );
       if (!playing) {
         clearInterval(interval);
@@ -102,13 +94,14 @@ export default function Player(videoCode: any) {
   };
   const onProgressMouseUp = () => {
     let message: playerMessage = {
+      roomId: room.room,
       currentTimePercentage: progressTime,
     };
     socket.emit("playerProgress-change", message);
   };
   const onVideoEnd = () => {
-    playing=false
-  }
+    playing = false;
+  };
   const opts: YouTubeProps["opts"] = {
     height: "390",
     width: "640",
@@ -123,7 +116,7 @@ export default function Player(videoCode: any) {
   return (
     <div>
       <YouTube
-        videoId={videoCode.videoCode}
+        videoId="DLXwnPMbivE"
         opts={opts}
         onReady={onPlayerReady}
         onEnd={onVideoEnd}
