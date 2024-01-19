@@ -2,61 +2,85 @@
 // ts
 import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
-import {  useState } from "react";
+import { useState, useEffect } from "react";
 import socket from "../api/socketApi";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPause,
+  faPlay,
+  faVolumeHigh,
+  faVolumeLow,
+  faVolumeOff,
+} from "@fortawesome/free-solid-svg-icons";
 let playing: boolean = false;
 let volume: number = 10;
 let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
-  socket.on("update-playerState", (msg: playerMessage) => {
-    if (msg.action == playerAction.Pause) {
-      playerEvent.target.pauseVideo();
+  useEffect(() => {
+    socket.on("update-playerState", (msg: playerMessage) => {
+      console.log("update-playerState")
+      if (msg.action == playerAction.Pause) {
+        playerEvent.target.pauseVideo();
+        playerEvent.target.seekTo(
+          getCurrentTime(
+            playerEvent.target.getDuration(),
+            msg.currentTimePercentage
+          )
+        );
+        playing = false;
+        setProgressTime(msg.currentTimePercentage);
+      } else if (msg.action == playerAction.Play) {
+        playerEvent.target.playVideo();
+        playerEvent.target.seekTo(
+          getCurrentTime(
+            playerEvent.target.getDuration(),
+            msg.currentTimePercentage
+          )
+        );
+        playing = true;
+        setProgressTime(msg.currentTimePercentage);
+        progressTimer();
+      }
+    });
+    return () => {
+      socket.off("update-playerState");
+    };
+  }, []);
+  useEffect(() => {
+    socket.on("update-playerProgress", (msg: playerMessage) => {
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
           msg.currentTimePercentage
         )
       );
-      playing = false;
       setProgressTime(msg.currentTimePercentage);
-    } else if (msg.action == playerAction.Play) {
-      playerEvent.target.playVideo();
+    });
+    return () => {
+      socket.off("update-playerProgress");
+    };
+  }, []);
+
+  useEffect(() => {
+    socket.on("update-video", (msg: playerMessage) => {
+      playerEvent.target.loadVideoById(msg.currentVideo);
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
           msg.currentTimePercentage
         )
       );
+      playerEvent.target.playVideo();
       playing = true;
       setProgressTime(msg.currentTimePercentage);
       progressTimer();
-    }
-  });
-  socket.on("update-playerProgress", (msg: playerMessage) => {
-    playerEvent.target.seekTo(
-      getCurrentTime(
-        playerEvent.target.getDuration(),
-        msg.currentTimePercentage
-      )
-    );
-    setProgressTime(msg.currentTimePercentage);
-  });
-
-  socket.on("update-video", (msg: playerMessage) => {
-    playerEvent.target.loadVideoById(msg.currentVideo);
-    playerEvent.target.seekTo(
-      getCurrentTime(
-        playerEvent.target.getDuration(),
-        msg.currentTimePercentage
-      )
-    );
-    playerEvent.target.playVideo();
-    playing = true;
-    setProgressTime(msg.currentTimePercentage);
-    progressTimer();
-  });
+    });
+    return () => {
+      socket.off("update-video");
+    };
+  }, []);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     playerEvent = event;
@@ -118,8 +142,8 @@ export default function Player(room: any) {
     playing = false;
   };
   const opts: YouTubeProps["opts"] = {
-    height: "390",
-    width: "640",
+    height: "548",
+    width: "900",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
@@ -129,30 +153,44 @@ export default function Player(room: any) {
   };
 
   return (
-    <div>
+    <div className="w-900 h-548">
       <YouTube
         videoId="DLXwnPMbivE"
         opts={opts}
         onReady={onPlayerReady}
         onEnd={onVideoEnd}
       />
-      <button className="" id="playbutton" onClick={playPause}>
-        play/pause
-      </button>
-      <input
-        type="range"
-        id="progress-slider"
-        value={progressTime}
-        onChange={onProgressChange}
-        onMouseUp={onProgressMouseUp}
-      />
-      <label htmlFor="volume-slider">Volume</label>
-      <input
-        type="range"
-        id="volume-slider"
-        defaultValue={10}
-        onChange={onVolumeChange}
-      />
+      <div className="flex flex-row p-4 justify-between gap-4">
+        <button className="" id="playbutton" onClick={playPause}>
+          {playing && <FontAwesomeIcon icon={faPause} />}
+          {!playing && <FontAwesomeIcon icon={faPlay} />}
+        </button>
+        <input
+          className="w-640"
+          type="range"
+          id="progress-slider"
+          value={progressTime}
+          onChange={onProgressChange}
+          onMouseUp={onProgressMouseUp}
+        />
+        <div className="flex flex-row gap-2">
+          {volume == 0 && (
+            <FontAwesomeIcon icon={faVolumeOff} className="align-middle" />
+          )}
+          {volume > 0 && volume < 50 && (
+            <FontAwesomeIcon icon={faVolumeLow} className="align-middle" />
+          )}
+          {volume > 50 && (
+            <FontAwesomeIcon icon={faVolumeHigh} className="align-middle" />
+          )}
+          <input
+            type="range"
+            id="volume-slider"
+            defaultValue={10}
+            onChange={onVolumeChange}
+          />
+        </div>
+      </div>
     </div>
   );
 }
