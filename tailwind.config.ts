@@ -8,6 +8,7 @@ const config: Config = {
   theme: {
     extend: {
       width: {
+        150: "150px",
         640: "640px",
         900: "900px",
       },

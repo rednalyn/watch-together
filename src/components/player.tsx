@@ -13,14 +13,14 @@ import {
   faVolumeLow,
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
-let playing: boolean = false;
-let volume: number = 10;
+
 let playerEvent: YouTubeEvent<any>;
+let volume: number = 10;
+let playing: boolean = false;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
   useEffect(() => {
     socket.on("update-playerState", (msg: playerMessage) => {
-      console.log("update-playerState")
       if (msg.action == playerAction.Pause) {
         playerEvent.target.pauseVideo();
         playerEvent.target.seekTo(
@@ -160,11 +160,16 @@ export default function Player(room: any) {
         onReady={onPlayerReady}
         onEnd={onVideoEnd}
       />
-      <div className="flex flex-row p-4 justify-between gap-4">
-        <button className="" id="playbutton" onClick={playPause}>
-          {playing && <FontAwesomeIcon icon={faPause} />}
-          {!playing && <FontAwesomeIcon icon={faPlay} />}
-        </button>
+      <div className="flex flex-row px-4 justify-between gap-4 bg-gray-950">
+        {playing ? (
+          <button className="p-4" id="playbutton" onClick={playPause}>
+            <FontAwesomeIcon icon={faPause} />
+          </button>
+        ) : (
+          <button className="p-4" id="playbutton" onClick={playPause}>
+            <FontAwesomeIcon icon={faPlay} />
+          </button>
+        )}
         <input
           className="w-640"
           type="range"
@@ -173,7 +178,7 @@ export default function Player(room: any) {
           onChange={onProgressChange}
           onMouseUp={onProgressMouseUp}
         />
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row justify-between self-center w-150">
           {volume == 0 && (
             <FontAwesomeIcon icon={faVolumeOff} className="align-middle" />
           )}
