@@ -1,9 +1,11 @@
-"use client"
 import { io } from "socket.io-client";
-import { playerAction, playerMessage } from "@/src/interfaces/playerMessages";
+import { playerAction, playerMessage } from "../interfaces/playerMessages";
 let socket: any;
 
-fetch("http://localhost:3000" + "/api/socket");
+if (typeof window !== "undefined") {
+  fetch(window.origin + "/api/socket");
+}
+
 socket = io();
 
 export let message: playerMessage = {

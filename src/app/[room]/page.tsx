@@ -1,8 +1,9 @@
 "use client";
-import Player from "@/src/components/player";
+
 import SearchPage from "../../components/search";
 import socket from "@/src/api/socketApi";
 import { nextVideo } from "@/src/api/socketApi";
+import Player from "@/src/components/player";
 
 export default function room({ params }: { params: { room: string } }) {
   socket.emit("joinRoom", params.room);
