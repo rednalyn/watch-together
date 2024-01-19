@@ -1,8 +1,8 @@
-enum playerAction {
+export enum playerAction {
   Play = "Play",
   Pause = "Pause",
 }
-interface playerMessage {
+export interface playerMessage {
   roomId: string;
   action?: playerAction;
   currentTimePercentage: number;

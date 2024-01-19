@@ -4,6 +4,7 @@ import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import {  useState } from "react";
 import socket from "@/src/api/socketApi";
+import { playerAction, playerMessage } from "../interfaces/playerMessages";
 let playing: boolean = false;
 let volume: number = 10;
 let playerEvent: YouTubeEvent<any>;
