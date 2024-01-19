@@ -12,8 +12,15 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        customPink: '#c76c6c',
+        customPinkOpacity03: 'rgba(199, 108, 108, 0.3)',
+        customPinkOpacity05: 'rgba(199, 108, 108, 0.5)'
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide')
+  ]
 }
 export default config

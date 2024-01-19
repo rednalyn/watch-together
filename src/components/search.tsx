@@ -5,6 +5,7 @@ import VideoSlider from './videoSlider';
 const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<searchResult[]>([]);
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
@@ -12,6 +13,7 @@ const SearchPage: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsFormVisible(true);
     const response = await fetch('/api/youtubeSearch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,10 +40,12 @@ const SearchPage: React.FC = () => {
           placeholder="Enter search term"
           style={inputStyle}
         />
-        <button type="submit" style={buttonStyle}>Search</button>
+        <button type="submit" style={buttonStyle} className="text-white hover:text-customPink">Search</button>
       </form>
       </div>
+  {isFormVisible && 
       <VideoSlider searchResults={searchResults} />
+    }
     </div>
   );
 };
@@ -58,24 +62,27 @@ const firstHeaderStyle: React.CSSProperties = {
 
 const secondHeaderStyle: React.CSSProperties = {
   display: 'flex',
-  justifyContent: 'center'
+  justifyContent: 'center',
 }
 
 const formStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   marginBottom: '20px',
-  border: '3px solid pink',
 };
 
 const inputStyle: React.CSSProperties = {
   padding: '10px',
-  marginRight: '10px'
+  backgroundColor: '#2b2a2e',
+  color: 'white',
+  borderRadius: '10px 0px 0px 10px'
 };
 
 const buttonStyle: React.CSSProperties = {
   padding: '10px',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  backgroundColor: '#000000',
+  borderRadius: '0px 10px 10px 0px'
 };
 
 export default SearchPage;
