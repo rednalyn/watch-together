@@ -97,6 +97,7 @@ export default function Player(room: any) {
   };
 
   const playPause = () => {
+    console.log("wtf is happpppppeningngningg")
     let message: playerMessage = {
       roomId: room.room,
       currentTimePercentage: progressTime,
