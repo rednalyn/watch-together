@@ -15,10 +15,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 let playerEvent: YouTubeEvent<any>;
-let volume: number = 10;
-let playing: boolean = false;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
+  const [playing, setPlaying] = useState(Boolean);
+  const [volume, setVolume] = useState(Number);
   useEffect(() => {
     socket.on("update-playerState", (msg: playerMessage) => {
       if (msg.action == playerAction.Pause) {
@@ -29,7 +29,7 @@ export default function Player(room: any) {
             msg.currentTimePercentage
           )
         );
-        playing = false;
+        setPlaying(false);
         setProgressTime(msg.currentTimePercentage);
       } else if (msg.action == playerAction.Play) {
         playerEvent.target.playVideo();
@@ -39,7 +39,7 @@ export default function Player(room: any) {
             msg.currentTimePercentage
           )
         );
-        playing = true;
+        setPlaying(true);
         setProgressTime(msg.currentTimePercentage);
         progressTimer();
       }
@@ -73,7 +73,7 @@ export default function Player(room: any) {
         )
       );
       playerEvent.target.playVideo();
-      playing = true;
+      setPlaying(true);
       setProgressTime(msg.currentTimePercentage);
       progressTimer();
     });
@@ -83,6 +83,7 @@ export default function Player(room: any) {
   }, []);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
+    setVolume(10)
     playerEvent = event;
     playerEvent.target.pauseVideo();
     playerEvent.target.setVolume(volume);
@@ -109,11 +110,11 @@ export default function Player(room: any) {
     return duration * (progressPercentage / 100);
   };
   const onVolumeChange = (e: any) => {
-    volume = e.target.value;
+    setVolume(e.target.value);
     playerEvent.target.setVolume(volume);
   };
   const onProgressChange = (e: any) => {
-    playing = false;
+    setPlaying(false);
     playerEvent.target.pauseVideo();
     setProgressTime(e.target.value);
   };
@@ -139,7 +140,7 @@ export default function Player(room: any) {
     socket.emit("playerProgress-change", message);
   };
   const onVideoEnd = () => {
-    playing = false;
+    setPlaying(false);
   };
   const opts: YouTubeProps["opts"] = {
     height: "548",
