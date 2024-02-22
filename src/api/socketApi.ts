@@ -3,12 +3,12 @@ import { playerAction, playerMessage } from "../interfaces/playerMessages";
 let socket: any;
 
 if (typeof window !== "undefined") {
-  console.log("fetch")
   fetch(window.origin + "/api/socket");
 }
 
 socket = io();
 
+console.log(socket)
 export let message: playerMessage = {
   roomId: "",
   currentTimePercentage: 0,
