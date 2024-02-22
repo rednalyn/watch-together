@@ -1,6 +1,6 @@
 "use client";
 
-import SearchPage from "../../../components/search";
+import SearchPage from "@/src/components/search";
 import socket from "@/src/api/socketApi";
 import Player from "@/src/components/player";
 
