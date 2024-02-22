@@ -21,6 +21,7 @@ export default function Player(room: any) {
   const [volume, setVolume] = useState(Number);
   useEffect(() => {
     socket.on("update-playerState", (msg: playerMessage) => {
+      console.log(msg)
       if (msg.action == playerAction.Pause) {
         playerEvent.target.pauseVideo();
         playerEvent.target.seekTo(
@@ -50,6 +51,7 @@ export default function Player(room: any) {
   }, []);
   useEffect(() => {
     socket.on("update-playerProgress", (msg: playerMessage) => {
+      console.log(msg)
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
@@ -65,6 +67,7 @@ export default function Player(room: any) {
 
   useEffect(() => {
     socket.on("update-video", (msg: playerMessage) => {
+      console.log(msg)
       playerEvent.target.loadVideoById(msg.currentVideo);
       playerEvent.target.seekTo(
         getCurrentTime(
