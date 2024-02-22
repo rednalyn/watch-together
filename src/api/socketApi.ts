@@ -3,6 +3,7 @@ import { playerAction, playerMessage } from "../interfaces/playerMessages";
 let socket: any;
 
 if (typeof window !== "undefined") {
+  console.log("fetch")
   fetch(window.origin + "/api/socket");
 }
 
