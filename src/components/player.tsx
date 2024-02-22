@@ -50,7 +50,7 @@ export default function Player(room: any) {
   }, []);
   useEffect(() => {
     socket.on("update-playerProgress", (msg: playerMessage) => {
-      console.log(msg)
+      console.log(msg);
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
@@ -84,7 +84,7 @@ export default function Player(room: any) {
   }, []);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
-    setVolume(10)
+    setVolume(10);
     playerEvent = event;
     playerEvent.target.pauseVideo();
     playerEvent.target.setVolume(volume);
@@ -161,7 +161,9 @@ export default function Player(room: any) {
         opts={opts}
         onReady={onPlayerReady}
         onEnd={onVideoEnd}
+        className="pointer-events-none"
       />
+
       <div className="flex flex-row px-4 justify-between gap-4 bg-gray-950">
         {playing ? (
           <button className="p-4" id="playbutton" onClick={playPause}>
