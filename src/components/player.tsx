@@ -21,7 +21,6 @@ export default function Player(room: any) {
   const [volume, setVolume] = useState(Number);
   useEffect(() => {
     socket.on("update-playerState", (msg: playerMessage) => {
-      console.log(msg)
       if (msg.action == playerAction.Pause) {
         playerEvent.target.pauseVideo();
         playerEvent.target.seekTo(
@@ -67,7 +66,6 @@ export default function Player(room: any) {
 
   useEffect(() => {
     socket.on("update-video", (msg: playerMessage) => {
-      console.log(msg)
       playerEvent.target.loadVideoById(msg.currentVideo);
       playerEvent.target.seekTo(
         getCurrentTime(
@@ -97,7 +95,6 @@ export default function Player(room: any) {
   };
 
   const playPause = () => {
-    console.log("wtf is happpppppeningngningg")
     let message: playerMessage = {
       roomId: room.room,
       currentTimePercentage: progressTime,

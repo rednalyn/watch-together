@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { nextVideo } from '../api/socketApi';
 
 interface SliderProps {
   searchResults: searchResult[];
@@ -20,12 +21,15 @@ const VideoSlider: React.FC<SliderProps> = ({ searchResults }) => {
       scrollContainer.current.scrollBy({ left: -300, behavior: 'smooth' });
     }
   };
+  const playNext = (videoId: any) => {
+    nextVideo(videoId);
+  };
 
   return (
     <div style={firstDivStyle}>
       <div style={secondDivStyle} ref={scrollContainer} className="scrollbar-hide">
         {searchResults.map((result, index) => (
-          <div key={index} style={thirdDivStyle}>
+          <div key={index} onClick={() => {playNext(result.id)}} style={thirdDivStyle}>
             <img
               src={result.snippet.thumbnails.medium.url}
               alt={result.snippet.title}
@@ -67,7 +71,8 @@ const secondDivStyle: React.CSSProperties = {
 const thirdDivStyle: React.CSSProperties = {
   display: 'inline-block',
   width: '300px',
-  marginRight: '10px'
+  marginRight: '10px',
+  cursor: 'pointer'
 };
 
 const iconContainerBaseStyle: React.CSSProperties = {
