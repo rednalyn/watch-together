@@ -13,35 +13,68 @@ import {
   faVolumeLow,
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
-
 let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
   const [volume, setVolume] = useState(Number);
+
+  useEffect(() => {
+    socket.on("joined-room", async (msg: playerMessage) => {
+      let waiting = true;
+      while (waiting) {
+        if (playerEvent) {
+          playerEvent.target.loadVideoById(msg.currentVideo);
+          playerEvent.target.seekTo(
+            getCurrentTime(
+              playerEvent.target.getDuration(),
+              msg.currentTimePercentage
+            )
+          );
+          playerEvent.target.playVideo();
+          setPlaying(true);
+          setProgressTime(msg.currentTimePercentage);
+          progressTimer();
+          waiting = false;
+        } else {
+          await new Promise((resolve: any) => {
+            setTimeout(() => {
+              resolve();
+            }, 1000);
+          });
+        }
+      }
+    });
+    return () => {
+      socket.off("joined-room");
+    };
+  }, []);
+
   useEffect(() => {
     socket.on("update-playerState", (msg: playerMessage) => {
-      if (msg.action == playerAction.Pause) {
-        playerEvent.target.pauseVideo();
-        playerEvent.target.seekTo(
-          getCurrentTime(
-            playerEvent.target.getDuration(),
-            msg.currentTimePercentage
-          )
-        );
-        setPlaying(false);
-        setProgressTime(msg.currentTimePercentage);
-      } else if (msg.action == playerAction.Play) {
-        playerEvent.target.playVideo();
-        playerEvent.target.seekTo(
-          getCurrentTime(
-            playerEvent.target.getDuration(),
-            msg.currentTimePercentage
-          )
-        );
-        setPlaying(true);
-        setProgressTime(msg.currentTimePercentage);
-        progressTimer();
+      if (playerEvent.target.getVideoData().title != "") {
+        if (msg.action == playerAction.Pause) {
+          playerEvent.target.pauseVideo();
+          playerEvent.target.seekTo(
+            getCurrentTime(
+              playerEvent.target.getDuration(),
+              msg.currentTimePercentage
+            )
+          );
+          setPlaying(false);
+          setProgressTime(msg.currentTimePercentage);
+        } else if (msg.action == playerAction.Play) {
+          playerEvent.target.playVideo();
+          playerEvent.target.seekTo(
+            getCurrentTime(
+              playerEvent.target.getDuration(),
+              msg.currentTimePercentage
+            )
+          );
+          setPlaying(true);
+          setProgressTime(msg.currentTimePercentage);
+          progressTimer();
+        }
       }
     });
     return () => {
@@ -50,7 +83,6 @@ export default function Player(room: any) {
   }, []);
   useEffect(() => {
     socket.on("update-playerProgress", (msg: playerMessage) => {
-      console.log(msg);
       playerEvent.target.seekTo(
         getCurrentTime(
           playerEvent.target.getDuration(),
@@ -86,7 +118,6 @@ export default function Player(room: any) {
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     setVolume(10);
     playerEvent = event;
-    playerEvent.target.pauseVideo();
     playerEvent.target.setVolume(volume);
     document.getElementById("playbutton")?.click();
     setTimeout(() => {
@@ -121,15 +152,18 @@ export default function Player(room: any) {
   };
   const progressTimer = () => {
     let interval = setInterval(() => {
+      // console.log("timer")
       setProgressTime(
         (playerEvent.target.getCurrentTime() /
           playerEvent.target.getDuration()) *
           100
       );
-      if (!playing) {
-        clearInterval(interval);
-      }
-    }, 250);
+
+      // if (!playing) {
+      //   console.log("!playing")
+      //   clearInterval(interval);
+      // }
+    }, 500);
   };
   const onProgressMouseUp = () => {
     let message: playerMessage = {
@@ -148,7 +182,6 @@ export default function Player(room: any) {
     width: "900",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
-      autoplay: 1,
       controls: 0,
       disablekb: 1,
     },
@@ -157,7 +190,6 @@ export default function Player(room: any) {
   return (
     <div className="w-900 h-548">
       <YouTube
-        videoId="DLXwnPMbivE"
         opts={opts}
         onReady={onPlayerReady}
         onEnd={onVideoEnd}
