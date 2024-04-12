@@ -34,13 +34,13 @@ const SearchPage: React.FC = () => {
     <div style={secondHeaderStyle}>
       <form onSubmit={handleSubmit} style={formStyle}>
         <input 
-          type="text" 
+          type="text"
           value={searchTerm} 
           onChange={handleInputChange} 
           placeholder="Enter search term"
           style={inputStyle}
         />
-        <button type="submit" style={buttonStyle} className="text-white hover:text-customPink">Search</button>
+        <button type="submit" className="p-2 cursor-pointer bg-black rounded-r-lg border border-customPinkOpacity03 hover:text-customPink">Search</button>
       </form>
       </div>
   {isFormVisible && 
@@ -76,13 +76,6 @@ const inputStyle: React.CSSProperties = {
   backgroundColor: '#2b2a2e',
   color: 'white',
   borderRadius: '10px 0px 0px 10px'
-};
-
-const buttonStyle: React.CSSProperties = {
-  padding: '10px',
-  cursor: 'pointer',
-  backgroundColor: '#000000',
-  borderRadius: '0px 10px 10px 0px'
 };
 
 export default SearchPage;
