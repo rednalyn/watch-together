@@ -31,7 +31,8 @@ const Header = () => {
     fontSize: '30px',
     borderBottom: '3px solid #c76c6c', 
     fontWeight: 'bold',
-    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)'
+    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+    overflow:'hidden',
   };
   
   const textWithImageStyle: React.CSSProperties = {

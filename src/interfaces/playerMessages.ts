@@ -7,4 +7,6 @@ export interface playerMessage {
   action?: playerAction;
   currentTimePercentage: number;
   currentVideo?: string;
+  users:user[]
+  playlist:searchResult[]
 }
