@@ -15,7 +15,7 @@ export let message: playerMessage = {
 };
 
 export const nextVideo = (sr: searchResult) => {
-  if(message.currentVideo != null) {
+  if (message.currentVideo != null) {
     message.playlist?.push(sr);
     addToPlaylist(message);
   } else {
@@ -24,7 +24,6 @@ export const nextVideo = (sr: searchResult) => {
     message.action = playerAction.Play;
     socket.emit("video-change", message);
   }
-
 };
 
 export const addToPlaylist = (message: playerMessage) => {
@@ -33,11 +32,9 @@ export const addToPlaylist = (message: playerMessage) => {
 };
 
 export const removeFromPlaylist = (index: number) => {
-  message.playlist.splice(index, 1);
+  message.playlist?.splice(index, 1);
   socket.emit("update-playlist", message);
-}
-
-
+};
 
 socket.onAny((event: any, msg: playerMessage) => {
   // console.log(event, msg)

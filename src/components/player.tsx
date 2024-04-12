@@ -13,7 +13,6 @@ import {
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
@@ -127,8 +126,8 @@ export default function Player(room: any) {
   };
 
   const fullScreen = () => {
-console.log(playerEvent.target)
-  }
+    console.log(playerEvent.target);
+  };
 
   const playPause = () => {
     let message: playerMessage = {
@@ -148,6 +147,9 @@ console.log(playerEvent.target)
   };
   const onVolumeChange = (e: any) => {
     setVolume(e.target.value);
+    if (e.target.value < 2) {
+      setVolume(0);
+    }
     playerEvent.target.setVolume(volume);
   };
   const onProgressChange = (e: any) => {
@@ -234,11 +236,12 @@ console.log(playerEvent.target)
             id="volume-slider"
             defaultValue={10}
             onChange={onVolumeChange}
+            onMouseUp={onVolumeChange}
           />
         </div>
         <button onClick={fullScreen}>
           <FontAwesomeIcon icon={faExpand} className="align-middle" />
-          </button>
+        </button>
       </div>
     </div>
   );
