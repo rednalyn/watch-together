@@ -13,16 +13,16 @@ const saveMessage = async (msg: playerMessage) => {
       room.currentTimePercentage = msg.currentTimePercentage;
     if (msg.currentVideo) room.currentVideo = msg.currentVideo;
     room.roomId = msg.roomId;
-    room.playlist= msg.playlist;
-    room.users=msg.users;
+    if (msg.playlist) room.playlist = msg.playlist;
+    if (msg.users) room.users = msg.users;
   } else {
     state.push({
       action: msg.action,
       currentTimePercentage: msg.currentTimePercentage,
       currentVideo: msg.currentVideo,
       roomId: msg.roomId,
-      playlist: msg.playlist,
-      users: msg.users,
+      playlist: [],
+      users: [],
     });
   }
 };
@@ -42,12 +42,11 @@ const SocketHandler = (req: any, res: any) => {
       socket.on("joinRoom", (msg: playerMessage) => {
         console.log("joining room " + msg.roomId);
         socket.join(msg.roomId);
-        socket.emit(
-          "joined-room",
-          state.find((a) => {
-            return a.roomId == msg.roomId;
-          })
-        );
+        let room = state.find((a) => {
+          return a.roomId == msg.roomId;
+        });
+        room?.users.push({ socketId: socket.id });
+        socket.emit("joined-room", room);
       });
       socket.on("playerState-change", (msg: playerMessage) => {
         io.to(msg.roomId).emit(
@@ -72,6 +71,21 @@ const SocketHandler = (req: any, res: any) => {
             return a.roomId == msg.roomId;
           })
         );
+      });
+      socket.on("disconnecting", (reason) => {
+        socket.rooms.forEach((socketRoom) => {
+          if (socketRoom !== socket.id) {
+            let room = state.find((a) => {
+              return a.roomId == socketRoom;
+            });
+            room?.users.forEach((user, index) => {
+              if (user.socketId == socket.id) {
+                room?.users.splice(index, 1);
+                io.to(socketRoom).emit("user-disconnected", room);
+              }
+            });
+          }
+        });
       });
     });
   }

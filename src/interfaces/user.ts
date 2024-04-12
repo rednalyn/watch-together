@@ -1,3 +1,3 @@
 interface user {
-    id: string;
+    socketId: string;
   }
