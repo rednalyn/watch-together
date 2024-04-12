@@ -1,5 +1,3 @@
-"use client";
-// ts
 import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useState, useEffect } from "react";
@@ -13,8 +11,14 @@ import {
   faVolumeLow,
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
+
+interface PlayerProps{
+  room: any
+  className?: string;
+}
+
 let playerEvent: YouTubeEvent<any>;
-export default function Player(room: any) {
+export default function Player( {room, className}:PlayerProps) {
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
   const [volume, setVolume] = useState(Number);
@@ -188,7 +192,7 @@ export default function Player(room: any) {
   };
 
   return (
-    <div className="w-900 h-548">
+    <div className={`w-900 ${className}`}>
       <YouTube
         opts={opts}
         onReady={onPlayerReady}

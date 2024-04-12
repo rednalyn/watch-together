@@ -15,7 +15,7 @@ export let message: playerMessage = {
 
 export const nextVideo = (sr: searchResult) => {
   if(message.currentVideo != null) {
-    message.playlist.push(sr);
+    message.playlist?.push(sr);
     addToPlaylist(message);
   } else {
     message.currentVideo = sr.id.videoId;
@@ -31,13 +31,7 @@ export const addToPlaylist = (message: playerMessage) => {
   socket.emit("add-to-playlist", message);
 };
 
-export const subscribeToPlaylistUpdates = (callback) => {
-  console.log("subscribe!!!!!");
-  socket.on('playlist-update', callback);
-  return () => {
-    socket.off('playlist-update', callback);
-  };
-};
+
 
 socket.onAny((event: any, msg: playerMessage) => {
   console.log(event, msg)

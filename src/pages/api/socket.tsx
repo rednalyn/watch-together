@@ -1,5 +1,6 @@
 import { playerMessage } from "@/src/interfaces/playerMessages";
 import { Server } from "socket.io";
+import { generateUsername } from "unique-username-generator";
 
 let state: playerMessage[] = [];
 
@@ -45,8 +46,8 @@ const SocketHandler = (req: any, res: any) => {
         let room = state.find((a) => {
           return a.roomId == msg.roomId;
         });
-        room?.users.push({ socketId: socket.id });
-        socket.emit("joined-room", room);
+        room?.users?.push({ socketId: socket.id, userName: generateUsername() });
+        io.to(msg.roomId).emit("userlist-changed", room);
       });
       socket.on("playerState-change", (msg: playerMessage) => {
         io.to(msg.roomId).emit(
@@ -78,17 +79,17 @@ const SocketHandler = (req: any, res: any) => {
             let room = state.find((a) => {
               return a.roomId == socketRoom;
             });
-            room?.users.forEach((user, index) => {
+            room?.users?.forEach((user, index) => {
               if (user.socketId == socket.id) {
-                room?.users.splice(index, 1);
-                io.to(socketRoom).emit("user-disconnected", room);
+                room?.users?.splice(index, 1);
+                io.to(socketRoom).emit("userlist-changed", room);
               }
             });
           }
         });
       });
       socket.on("add-to-playlist", (msg: playerMessage) => {
-          io.to(msg.roomId).emit("playlist-update", msg.playlist);
+          io.to(msg.roomId).emit("playlist-update", msg);
       });
     });
   }
