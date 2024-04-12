@@ -13,12 +13,16 @@ const saveMessage = async (msg: playerMessage) => {
       room.currentTimePercentage = msg.currentTimePercentage;
     if (msg.currentVideo) room.currentVideo = msg.currentVideo;
     room.roomId = msg.roomId;
+    room.playlist= msg.playlist;
+    room.users=msg.users;
   } else {
     state.push({
       action: msg.action,
       currentTimePercentage: msg.currentTimePercentage,
       currentVideo: msg.currentVideo,
       roomId: msg.roomId,
+      playlist: msg.playlist,
+      users: msg.users,
     });
   }
 };
