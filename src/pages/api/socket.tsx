@@ -5,6 +5,7 @@ import { generateUsername } from "unique-username-generator";
 let state: playerMessage[] = [];
 
 const saveMessage = async (msg: playerMessage) => {
+  console.log(msg)
   let room = state.find((a) => {
     return a.roomId == msg.roomId;
   });

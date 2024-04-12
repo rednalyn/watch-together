@@ -12,13 +12,9 @@ import {
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
 
-interface PlayerProps{
-  room: any
-  className?: string;
-}
 
 let playerEvent: YouTubeEvent<any>;
-export default function Player( {room, className}:PlayerProps) {
+export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
   const [volume, setVolume] = useState(Number);
@@ -192,7 +188,7 @@ export default function Player( {room, className}:PlayerProps) {
   };
 
   return (
-    <div className={`w-900 ${className}`}>
+    <div className="w-900">
       <YouTube
         opts={opts}
         onReady={onPlayerReady}

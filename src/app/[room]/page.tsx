@@ -22,9 +22,7 @@ export default function room({ params }: { params: { room: string } }) {
           <Playlist/>
           <Userlist className="w-fit" />
         </div>
-      
       </div>
-      
     </main>
   );
 }
