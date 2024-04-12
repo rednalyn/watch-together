@@ -55,7 +55,7 @@ const firstDivStyle: React.CSSProperties = {
   justifyContent: 'center',
   alignItems: 'center',
   position: 'relative',
-  width: '800px'
+  width: '900px'
 };
 
 const secondDivStyle: React.CSSProperties = {

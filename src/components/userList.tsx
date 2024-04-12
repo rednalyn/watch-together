@@ -21,10 +21,10 @@ export default function userList() {
 
   return (
     <div>
-      <p>Users</p>
+      <p className="text-center">Users</p>
       <ul className="p-2">
         {users.map((user, index) => (
-          <li key={index}>
+          <li className="ml-2 overflow-hidden whitespace-nowrap max-w-[200px]" key={index}>
             <FontAwesomeIcon icon={faUser} />
             <span className="ml-2">{user.userName}</span>
           </li>

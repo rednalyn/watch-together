@@ -14,15 +14,20 @@ export default function room({ params }: { params: { room: string } }) {
   }
   socket.emit("joinRoom", initroom);
   return (
-    <main className="flex flex-col justify-center">
-      <SearchPage  />
-      <div className="flex flex-row">
-        <Player room={params.room}/>
-        <div className="flex flex-col justify-between">
-          <Playlist />
-          <Userlist />
-        </div>
+<main className="flex flex-col items-center justify-center min-h-screen bg-black">
+  <SearchPage />
+  <div className="flex flex-col md:flex-row w-full p-4"> 
+    <Player room={params.room} className="mb-4 md:mb-0 md:mr-4"/>
+    <div className="flex flex-row  ml-4 p-6  space-x-4">
+      <div className="flex-1 bg-customPinkOpacity05 rounded-xl shadow-lg">
+        <Playlist />
       </div>
-    </main>
+      <div className="flex-1 bg-customPinkOpacity05 rounded-md shadow-lg">
+        <Userlist />
+      </div>
+    </div>
+  </div>
+</main>
+
   );
 }
