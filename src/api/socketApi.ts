@@ -35,7 +35,7 @@ export const addToPlaylist = (message: playerMessage) => {
 
 
 socket.onAny((event: any, msg: playerMessage) => {
-  console.log(event, msg)
+  // console.log(event, msg)
   message = msg;
 });
 export default socket;

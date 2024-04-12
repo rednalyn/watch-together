@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import VideoSlider from "./videoSlider";
 import { searchResult } from "../interfaces/searchResult";
 
-interface SearchPageProps{
-  className?: string;
-}
 
-export default function SearchPage({className}:SearchPageProps) {
+
+export default function SearchPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<searchResult[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -38,7 +36,7 @@ export default function SearchPage({className}:SearchPageProps) {
   };
 
   return (
-    <div className={`${className}`}>
+    <div className="">
       <h1 className="flex justify-center">Search for videos here</h1>
       <div className="flex justify-center">
         <form onSubmit={handleSubmit} className="flex justify-center mb-5">

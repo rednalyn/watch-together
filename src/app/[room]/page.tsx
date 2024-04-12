@@ -15,10 +15,10 @@ export default function room({ params }: { params: { room: string } }) {
   socket.emit("joinRoom", initroom);
   return (
     <main className="flex flex-col justify-center">
-      <SearchPage />
+      <SearchPage  />
       <div className="flex flex-row">
-        <Player room={params.room} className="" />
-        <div className="flex flex-col">
+        <Player room={params.room}/>
+        <div className="flex flex-col justify-between">
           <Playlist/>
           <Userlist className="w-fit" />
         </div>

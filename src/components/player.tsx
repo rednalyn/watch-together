@@ -5,6 +5,7 @@ import socket from "../api/socketApi";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faExpand,
   faPause,
   faPlay,
   faVolumeHigh,
@@ -125,6 +126,10 @@ export default function Player(room: any) {
     }, 1);
   };
 
+  const fullScreen = () => {
+console.log(playerEvent.target)
+  }
+
   const playPause = () => {
     let message: playerMessage = {
       roomId: room.room,
@@ -231,6 +236,9 @@ export default function Player(room: any) {
             onChange={onVolumeChange}
           />
         </div>
+        <button onClick={fullScreen}>
+          <FontAwesomeIcon icon={faExpand} className="align-middle" />
+          </button>
       </div>
     </div>
   );

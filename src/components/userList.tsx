@@ -1,16 +1,13 @@
 import React from "react";
-import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useState, useEffect } from "react";
 import socket from "../api/socketApi";
-import { playerAction, playerMessage } from "../interfaces/playerMessages";
+import {  playerMessage } from "../interfaces/playerMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-interface userListProps {
-  className?: string;
-}
 
-export default function userList({ className }: userListProps) {
+
+export default function userList() {
   const [users, setUsers] = useState<user[]>([]);
 
   useEffect(() => {
@@ -23,7 +20,7 @@ export default function userList({ className }: userListProps) {
   }, []);
 
   return (
-    <div className={`${className}`}>
+    <div>
       <p>Users</p>
       <ul className="p-2">
         {users.map((user, index) => (
