@@ -23,7 +23,6 @@ const VideoSlider: React.FC<SliderProps> = ({ searchResults }) => {
     }
   };
   const playNext = (searchResult: any) => {
-    console.log("searchresult", searchResult);
     nextVideo(searchResult);
   };
 

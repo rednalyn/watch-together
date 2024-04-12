@@ -17,7 +17,7 @@ let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
-  const [volume, setVolume] = useState(Number);
+  const [volume, setVolume] = useState(10);
 
   useEffect(() => {
     socket.on("joined-room", async (msg: playerMessage) => {
@@ -76,6 +76,7 @@ export default function Player(room: any) {
           progressTimer();
         }
       }
+      playerEvent.target.setVolume(volume);
     });
     return () => {
       socket.off("update-playerState");
@@ -116,7 +117,6 @@ export default function Player(room: any) {
   }, []);
 
   const onPlayerReady: YouTubeProps["onReady"] = (event) => {
-    setVolume(10);
     playerEvent = event;
     playerEvent.target.setVolume(volume);
     document.getElementById("playbutton")?.click();
