@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { nextVideo } from '../api/socketApi';
-import { log } from 'console';
 import { searchResult } from '../interfaces/searchResult';
 
 interface SliderProps {

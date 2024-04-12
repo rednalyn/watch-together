@@ -29,8 +29,13 @@ export const nextVideo = (sr: searchResult) => {
 
 export const addToPlaylist = (message: playerMessage) => {
   console.log("Adding video to playlist:", message.playlist);
-  socket.emit("add-to-playlist", message);
+  socket.emit("update-playlist", message);
 };
+
+export const removeFromPlaylist = (index: number) => {
+  message.playlist.splice(index, 1);
+  socket.emit("update-playlist", message);
+}
 
 
 
