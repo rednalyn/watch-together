@@ -19,8 +19,8 @@ export default function room({ params }: { params: { room: string } }) {
       <div className="flex flex-row">
         <Player room={params.room}/>
         <div className="flex flex-col justify-between">
-          <Playlist/>
-          <Userlist className="w-fit" />
+          <Playlist />
+          <Userlist />
         </div>
       </div>
     </main>
