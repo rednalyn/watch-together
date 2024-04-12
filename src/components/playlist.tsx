@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { removeFromPlaylist } from '../api/socketApi';
+import { removeFromPlaylist, nextVideo } from '../api/socketApi';
 import socket from '../api/socketApi';
 import {searchResult} from '../interfaces/searchResult';
 import { playerMessage } from '../interfaces/playerMessages';
@@ -28,18 +28,23 @@ export default function Playlist() {
     removeFromPlaylist(index);
   };
 
+
+  if (playlist.length === 0) {
+    return null; // Or return a placeholder message, etc.
+  }
+
   return (
     <div>
-      <h2>Playlist</h2>
+      <p className="text-center">Playlist</p>
       <ul>
         {playlist.map((video, index) => (
-          <div key={index} onClick={() => { removeVideo(index) }} style={thirdDivStyle}>
+          <div key={index}  style={thirdDivStyle}>
             <img
               src={video.snippet.thumbnails.medium.url}
               alt={video.snippet.title}
               style={imageStyle}
             />
-            <FontAwesomeIcon icon={faX} style={iconStyle} />
+            <FontAwesomeIcon icon={faX} style={iconStyle} onClick={() => { removeVideo(index) }}/>
             <p style={pStyle}>{video.snippet.title}</p>
           </div>
         ))}
@@ -49,16 +54,16 @@ export default function Playlist() {
 };
 
 const thirdDivStyle: React.CSSProperties = {
-  display: 'inline-block',
-  width: '300px',
+  width: '200px',
   marginRight: '10px',
+  marginLeft: '10px',
   cursor: 'pointer',
   position: 'relative',
 };
 
 const imageStyle: React.CSSProperties = {
-  width: '300px',
-  height: '150px',
+  width: '200px',
+  height: '100px',
   borderRadius: '10px',
   border: '1px solid #c76c6c'
 };
@@ -72,7 +77,7 @@ const pStyle: React.CSSProperties = {
 };
 const iconStyle: React.CSSProperties = {
   color: 'white',
-  fontSize: '28px',
+  fontSize: '15px',
   position: 'absolute', 
   top: '10px', 
   right: '10px', 
