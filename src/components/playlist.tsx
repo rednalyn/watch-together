@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { subscribeToPlaylistUpdates } from '../api/socketApi';
 import socket from '../api/socketApi';
-import searchResult from '../interfaces/searchResult';
+import {searchResult} from '../interfaces/searchResult';
 import { playerMessage } from '../interfaces/playerMessages';
 
 export default function Playlist() {

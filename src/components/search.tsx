@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import VideoSlider from "./videoSlider";
+import { searchResult } from "../interfaces/searchResult";
 
 interface SearchPageProps{
   className?: string;

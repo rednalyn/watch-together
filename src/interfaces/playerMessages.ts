@@ -1,3 +1,5 @@
+import { searchResult } from "./searchResult";
+
 export enum playerAction {
   Play = "Play",
   Pause = "Pause",

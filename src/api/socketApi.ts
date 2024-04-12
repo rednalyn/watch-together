@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
+import { searchResult } from "../interfaces/searchResult";
 let socket: any;
 
 if (typeof window !== "undefined") {
