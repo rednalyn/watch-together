@@ -87,6 +87,9 @@ const SocketHandler = (req: any, res: any) => {
           }
         });
       });
+      socket.on("add-to-playlist", (msg: playerMessage) => {
+          io.to(msg.roomId).emit("playlist-update", msg.playlist);
+      });
     });
   }
   res.end();

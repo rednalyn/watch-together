@@ -13,11 +13,30 @@ export let message: playerMessage = {
   currentTimePercentage: 0,
 };
 
-export const nextVideo = (videoId: string) => {
-  message.currentVideo = videoId;
-  message.currentTimePercentage = 0;
-  message.action = playerAction.Play;
-  socket.emit("video-change", message);
+export const nextVideo = (sr: searchResult) => {
+  if(message.currentVideo != null) {
+    message.playlist.push(sr);
+    addToPlaylist(message);
+  } else {
+    message.currentVideo = sr.id.videoId;
+    message.currentTimePercentage = 0;
+    message.action = playerAction.Play;
+    socket.emit("video-change", message);
+  }
+
+};
+
+export const addToPlaylist = (message: playerMessage) => {
+  console.log("Adding video to playlist:", message.playlist);
+  socket.emit("add-to-playlist", message);
+};
+
+export const subscribeToPlaylistUpdates = (callback) => {
+  console.log("subscribe!!!!!");
+  socket.on('playlist-update', callback);
+  return () => {
+    socket.off('playlist-update', callback);
+  };
 };
 
 socket.onAny((event: any, msg: playerMessage) => {
