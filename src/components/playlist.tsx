@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { removeFromPlaylist, nextVideo } from '../api/socketApi';
+import { removeFromPlaylist, playVideoFromPlaylist } from '../api/socketApi';
 import socket from '../api/socketApi';
 import {searchResult} from '../interfaces/searchResult';
 import { playerMessage } from '../interfaces/playerMessages';
@@ -28,6 +28,9 @@ export default function Playlist() {
     removeFromPlaylist(index);
   };
 
+  const playFromPlaylist = (searchResult: any) => {
+    playVideoFromPlaylist(searchResult);
+  };
 
   if (playlist.length === 0) {
     return null; // Or return a placeholder message, etc.
@@ -38,7 +41,7 @@ export default function Playlist() {
       <p className="text-center">Playlist</p>
       <ul>
         {playlist.map((video, index) => (
-          <div key={index}  style={thirdDivStyle}>
+          <div key={index}  style={thirdDivStyle} onClick={() => { playFromPlaylist(index) }}>
             <img
               src={video.snippet.thumbnails.medium.url}
               alt={video.snippet.title}

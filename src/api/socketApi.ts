@@ -14,10 +14,23 @@ export let message: playerMessage = {
   currentTimePercentage: 0,
 };
 
+export const playVideoFromPlaylist = (index: number) => {
+ const video = message.playlist![index]
+ message.currentVideo = video.id.videoId;
+ message.currentTimePercentage = 0;
+  socket.emit("video-change",message)
+  removeFromPlaylist(index);
+}
+
 export const nextVideo = (sr: searchResult) => {
   if (message.currentVideo != null) {
-    message.playlist?.push(sr);
-    addToPlaylist(message);
+    const videoExists = message.playlist?.some(video => {
+      return video.id.videoId === sr.id.videoId;
+    });
+    if(!videoExists) {
+      message.playlist?.push(sr);
+      addToPlaylist(message);
+    }
   } else {
     message.currentVideo = sr.id.videoId;
     message.currentTimePercentage = 0;
