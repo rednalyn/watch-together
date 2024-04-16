@@ -7,7 +7,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 
 
-export default function userList() {
+export default function UserList() {
   const [users, setUsers] = useState<user[]>([]);
 
   useEffect(() => {
