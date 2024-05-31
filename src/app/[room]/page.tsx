@@ -14,7 +14,7 @@ export default function room({ params }: { params: { room: string } }) {
   }
   socket.emit("joinRoom", initroom);
   return (
-<main className="flex flex-col items-center justify-center min-h-screen bg-black">
+<main className="flex flex-col items-center justify-center bg-black overflow-x-hidden">
   <SearchPage />
   <div className="flex flex-col md:flex-row w-full p-4"> 
     <Player room={params.room} className="mb-4 md:mb-0 md:mr-4"/>
