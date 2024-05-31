@@ -61,12 +61,8 @@ const firstDivStyle: React.CSSProperties = {
 const secondDivStyle: React.CSSProperties = {
   display: 'flex',
   overflowX: 'auto',
-  whiteSpace: 'nowrap',
   padding: '20px',
-  background: 'black',
   borderRadius: '10px',
-  position: 'relative',
-  width: '100%'
 };
 
 const thirdDivStyle: React.CSSProperties = {
