@@ -2,6 +2,7 @@ import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useState, useEffect } from "react";
 import socket from "../api/socketApi";
+import { playVideoFromPlaylist } from '../api/socketApi';
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -183,6 +184,7 @@ export default function Player(room: any) {
   };
   const onVideoEnd = () => {
     setPlaying(false);
+    playVideoFromPlaylist(0);
   };
   const opts: YouTubeProps["opts"] = {
     height: "548",

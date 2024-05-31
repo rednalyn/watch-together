@@ -32,9 +32,6 @@ export default function Playlist() {
     playVideoFromPlaylist(searchResult);
   };
 
-  if (playlist.length === 0) {
-    return null; // Or return a placeholder message, etc.
-  }
 
   return (
     <div>

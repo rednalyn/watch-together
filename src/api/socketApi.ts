@@ -15,11 +15,13 @@ export let message: playerMessage = {
 };
 
 export const playVideoFromPlaylist = (index: number) => {
- const video = message.playlist![index]
- message.currentVideo = video.id.videoId;
- message.currentTimePercentage = 0;
-  socket.emit("video-change",message)
-  removeFromPlaylist(index);
+  if(message.playlist != null) {
+    const video = message.playlist![index]
+    message.currentVideo = video.id.videoId;
+    message.currentTimePercentage = 0;
+    socket.emit("video-change",message)
+    removeFromPlaylist(index);
+  }
 }
 
 export const nextVideo = (sr: searchResult) => {
