@@ -9,26 +9,25 @@ import { playerMessage } from "@/src/interfaces/playerMessages";
 
 export default function room({ params }: { params: { room: string } }) {
   let initroom: playerMessage = {
-    roomId:params.room,
-    currentTimePercentage: -1
-  }
+    roomId: params.room,
+    currentTimePercentage: -1,
+  };
   socket.emit("joinRoom", initroom);
   return (
-<main className="flex flex-col items-center justify-center bg-black overflow-x-hidden">
-  <SearchPage />
-  <div className="flex flex-col md:flex-row"> 
-    <Player room={params.room} className="mb-4 md:mb-0 md:mr-4"/>
-    <div className="flex flex-row  ml-4 p-6  space-x-4">
-
-      <div className="flex-1 bg-customPinkOpacity03 rounded-md shadow-lg">
-        <Userlist />
+    <main className="flex flex-col items-center justify-center bg-black">
+      <div className="h-80 mt-4">
+        <SearchPage />
       </div>
-    </div>
-  </div>
-  <div className="w-1/2 mb-2 flex-1 bg-customPinkOpacity03 rounded-xl shadow-lg">
-        <Playlist />
-    </div>
-</main>
-
+      <div className="flex flex-row justify-center w-full h-full mb-16">
+        <div className=" bg-customPinkOpacity03  rounded-s-md shadow-lg w-80 min-h-full max-h-full overflow-auto">
+          <Userlist />
+        </div>
+        <Player room={params.room} className="mb-4 md:mb-0" />
+        <div className=" bg-customPinkOpacity03 rounded-e-md shadow-lg w-80 min-h-full max-h-full overflow-auto">
+          <Playlist />
+        </div>
+        {/* <div className="flex flex-row  ml-4 p-6  space-x-4"></div> */}
+      </div>
+    </main>
   );
 }

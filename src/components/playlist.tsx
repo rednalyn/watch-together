@@ -34,11 +34,11 @@ export default function Playlist() {
 
 
   return (
-    <div className="text-center p-4">
+    <div className="text-center p-4 w-full h-1">
       <p className="mb-4 text-xl text-white">Playlist</p>
         <ul className="flex flex-wrap justify-start w-full">
           {playlist.map((video, index) => (
-            <li key={index} className="w-1/3 px-2 box-border">
+            <li key={index} className="w-64 m-auto box-border">
               <div className="relative cursor-pointer" onClick={() => { playFromPlaylist(index) }}>
                 <img
                   src={video.snippet.thumbnails.medium.url}

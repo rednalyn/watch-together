@@ -20,8 +20,8 @@ export default function UserList() {
   }, []);
 
   return (
-    <div>
-      <p className="text-center">Users</p>
+    <div className="h-1 p-4">
+      <p className="text-center w-ful text-xl">Users</p>
       <ul className="p-2">
         {users.map((user, index) => (
           <li className="ml-2 overflow-hidden whitespace-nowrap max-w-[200px]" key={index}>

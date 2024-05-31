@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useState, useEffect } from "react";
 import socket from "../api/socketApi";
@@ -18,8 +18,8 @@ import {
 
 let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
-  const height = 584;
-  const width = 900;
+  const height = screen.height * 0.6;
+  const width = screen.width * 0.6;
 
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
@@ -279,7 +279,7 @@ export default function Player(room: any) {
         }}
       >
         {showControls || !fullscreen ? (
-          <div className="flex flex-row px-4 justify-between gap-4 bg-gray-950">
+          <div className="flex flex-row px-4 justify-between gap-4 bg-customPinkOpacity03  border-x border-black">
             {playing ? (
               <button className="p-4" id="playbutton" onClick={playPause}>
                 <FontAwesomeIcon icon={faPause} />
