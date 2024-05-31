@@ -2,7 +2,7 @@ import React from "react";
 import YouTube, { YouTubeEvent, YouTubeProps } from "react-youtube";
 import { useState, useEffect } from "react";
 import socket from "../api/socketApi";
-import { playVideoFromPlaylist } from '../api/socketApi';
+import { playVideoFromPlaylist } from "../api/socketApi";
 import { playerAction, playerMessage } from "../interfaces/playerMessages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,14 +27,18 @@ export default function Player(room: any) {
   const [playerHeight, setPlayerHeight] = useState(height);
   const [playerWidth, setPlayerWidth] = useState(width);
   const [fullscreen, setFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(false);
   // const [playerWithControls, setPlayerWithControls] = useState()
-  
-  let playerWithControls:any;
+
+  let playerWithControls: any;
 
   useEffect(() => {
-    if(document){
-      playerWithControls = document.getElementById("player-with-controls")
-      playerWithControls?.addEventListener("fullscreenchange", fullscreenchanged);
+    if (document) {
+      playerWithControls = document.getElementById("player-with-controls");
+      playerWithControls?.addEventListener(
+        "fullscreenchange",
+        fullscreenchanged
+      );
       playerWithControls?.addEventListener(
         "mozfullscreenchange",
         fullscreenchanged
@@ -48,8 +52,8 @@ export default function Player(room: any) {
         fullscreenchanged
       );
     }
-  })
-  useEffect(() => {    
+  });
+  useEffect(() => {
     socket.on("joined-room", async (msg: playerMessage) => {
       let waiting = true;
       while (waiting) {
@@ -160,22 +164,23 @@ export default function Player(room: any) {
       setPlayerHeight(height);
       setPlayerWidth(width);
       setFullscreen(false);
-    }
-    else{
-      setPlayerHeight(screen.height - 56);
+    } else {
+      setPlayerHeight(screen.height);
       setPlayerWidth(screen.width);
       setFullscreen(true);
     }
   };
-  const exitFullscreen =() => {
+  const exitFullscreen = () => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { /* Safari */
+    } else if (document.webkitExitFullscreen) {
+      /* Safari */
       document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE11 */
+    } else if (document.msExitFullscreen) {
+      /* IE11 */
       document.msExitFullscreen();
     }
-  }
+  };
 
   const requestFullScreen = () => {
     if (playerWithControls?.requestFullscreen) {
@@ -264,55 +269,67 @@ export default function Player(room: any) {
         className="pointer-events-none"
       />
 
-      <div className="flex flex-row px-4 justify-between gap-4 bg-gray-950">
-        {playing ? (
-          <button className="p-4" id="playbutton" onClick={playPause}>
-            <FontAwesomeIcon icon={faPause} />
-          </button>
+      <div
+        className={`h-14 relative ${fullscreen ? " -mt-14 " : ""}`}
+        onMouseEnter={() => {
+          if (fullscreen) setShowControls(true);
+        }}
+        onMouseLeave={() => {
+          if (fullscreen) setShowControls(false);
+        }}
+      >
+        {showControls || !fullscreen ? (
+          <div className="flex flex-row px-4 justify-between gap-4 bg-gray-950">
+            {playing ? (
+              <button className="p-4" id="playbutton" onClick={playPause}>
+                <FontAwesomeIcon icon={faPause} />
+              </button>
+            ) : (
+              <button className="p-4" id="playbutton" onClick={playPause}>
+                {" "}
+                <FontAwesomeIcon icon={faPlay} />
+              </button>
+            )}
+            <input
+              className="w-full"
+              type="range"
+              id="progress-slider"
+              value={progressTime}
+              onChange={onProgressChange}
+              onMouseUp={onProgressMouseUp}
+            />
+            <div className="flex flex-row gap-4 self-center">
+              {volume == 0 && (
+                <FontAwesomeIcon icon={faVolumeOff} className="align-middle" />
+              )}
+              {volume > 0 && volume < 50 && (
+                <FontAwesomeIcon icon={faVolumeLow} className="align-middle" />
+              )}
+              {volume > 50 && (
+                <FontAwesomeIcon icon={faVolumeHigh} className="align-middle" />
+              )}
+              <input
+                type="range"
+                className=" w-full"
+                id="volume-slider"
+                defaultValue={10}
+                onChange={onVolumeChange}
+                onMouseUp={onVolumeChange}
+              />
+            </div>
+            {fullscreen ? (
+              <button onClick={exitFullscreen}>
+                <FontAwesomeIcon icon={faMinimize} className="align-middle" />
+              </button>
+            ) : (
+              <button onClick={requestFullScreen}>
+                <FontAwesomeIcon icon={faExpand} className="align-middle" />
+              </button>
+            )}
+          </div>
         ) : (
-          <button className="p-4" id="playbutton" onClick={playPause}>
-            <FontAwesomeIcon icon={faPlay} />
-          </button>
+          <div></div>
         )}
-        <input
-        
-          className='w-full'
-          type="range"
-          id="progress-slider"
-          value={progressTime}
-          onChange={onProgressChange}
-          onMouseUp={onProgressMouseUp}
-        />
-        <div className="flex flex-row gap-4 self-center">
-          {volume == 0 && (
-            <FontAwesomeIcon icon={faVolumeOff} className="align-middle" />
-          )}
-          {volume > 0 && volume < 50 && (
-            <FontAwesomeIcon icon={faVolumeLow} className="align-middle" />
-          )}
-          {volume > 50 && (
-            <FontAwesomeIcon icon={faVolumeHigh} className="align-middle" />
-          )}
-          <input
-            type="range"
-            className=" w-full"
-            id="volume-slider"
-            defaultValue={10}
-            onChange={onVolumeChange}
-            onMouseUp={onVolumeChange}
-          />
-        </div>
-        {fullscreen ? (
-         <button onClick={exitFullscreen}>
-         <FontAwesomeIcon icon={faMinimize} className="align-middle" />
-       </button>
-        ):(
-          <button onClick={requestFullScreen}>
-          <FontAwesomeIcon icon={faExpand} className="align-middle" />
-        </button>
-         
-        )
-      }
       </div>
     </div>
   );
