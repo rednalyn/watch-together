@@ -34,52 +34,24 @@ export default function Playlist() {
 
 
   return (
-    <div>
-      <p className="text-center">Playlist</p>
-      <ul>
-        {playlist.map((video, index) => (
-          <div key={index}  style={thirdDivStyle} onClick={() => { playFromPlaylist(index) }}>
-            <img
-              src={video.snippet.thumbnails.medium.url}
-              alt={video.snippet.title}
-              style={imageStyle}
-            />
-            <FontAwesomeIcon icon={faX} style={iconStyle} onClick={() => { removeVideo(index) }}/>
-            <p style={pStyle}>{video.snippet.title}</p>
-          </div>
-        ))}
-      </ul>
+    <div className="text-center p-4">
+      <p className="mb-4 text-xl text-white">Playlist</p>
+        <ul className="flex flex-wrap justify-start w-full">
+          {playlist.map((video, index) => (
+            <li key={index} className="w-1/3 px-2 box-border">
+              <div className="relative cursor-pointer" onClick={() => { playFromPlaylist(index) }}>
+                <img
+                  src={video.snippet.thumbnails.medium.url}
+                  alt={video.snippet.title}
+                  className="w-full h-auto rounded-lg border border-red-400"
+                />
+                <FontAwesomeIcon icon={faX} className="absolute top-2 right-2 text-white text-lg" onClick={(e) => { e.stopPropagation(); removeVideo(index); }}/>
+                <p className="mt-2 text-white text-center overflow-hidden text-ellipsis whitespace-nowrap">{video.snippet.title}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
     </div>
   );
 };
 
-const thirdDivStyle: React.CSSProperties = {
-  width: '200px',
-  marginRight: '10px',
-  marginLeft: '10px',
-  cursor: 'pointer',
-  position: 'relative',
-};
-
-const imageStyle: React.CSSProperties = {
-  width: '200px',
-  height: '100px',
-  borderRadius: '10px',
-  border: '1px solid #c76c6c'
-};
-
-const pStyle: React.CSSProperties = {
-  color: 'white',
-  textAlign: 'center',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap'
-};
-const iconStyle: React.CSSProperties = {
-  color: 'white',
-  fontSize: '15px',
-  position: 'absolute', 
-  top: '10px', 
-  right: '10px', 
-  zIndex: 1, 
-};
