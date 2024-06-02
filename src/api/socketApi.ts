@@ -51,6 +51,15 @@ export const removeFromPlaylist = (index: number) => {
   socket.emit("update-playlist", message);
 };
 
+export const checkExistingRoom = (room: String) => {
+  return new Promise((resolve) => {
+    socket.emit('check-existing-room', room, (exists: boolean) => {
+      resolve(exists);
+    });
+  });
+};
+
+
 socket.onAny((event: any, msg: playerMessage) => {
   // console.log(event, msg)
   message = msg;

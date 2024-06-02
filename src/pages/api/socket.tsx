@@ -91,6 +91,10 @@ const SocketHandler = (req: any, res: any) => {
       socket.on("update-playlist", (msg: playerMessage) => {
           io.to(msg.roomId).emit("playlist-update", msg);
       });
+      socket.on("check-existing-room", (room, callback) => {
+        let roomExists = state.some((a) => a.roomId === room);
+        callback(roomExists);
+      });
     });
   }
   res.end();
