@@ -18,8 +18,8 @@ import {
 
 let playerEvent: YouTubeEvent<any>;
 export default function Player(room: any) {
-  const height = screen.height * 0.6;
-  const width = screen.width * 0.6;
+  const height = window.innerHeight * 0.6;
+  const width = window.innerWidth * 0.6;
 
   const [progressTime, setProgressTime] = useState(Number);
   const [playing, setPlaying] = useState(Boolean);
@@ -29,6 +29,16 @@ export default function Player(room: any) {
   const [fullscreen, setFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   // const [playerWithControls, setPlayerWithControls] = useState()
+
+  useEffect(() => {
+    const resize = () => {
+      setPlayerHeight(window.innerHeight * 0.6);
+
+      setPlayerWidth(window.innerWidth * 0.6);
+    };
+
+    window.addEventListener("resize", resize, false);
+  });
 
   let playerWithControls: any;
 
