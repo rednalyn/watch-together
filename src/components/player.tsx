@@ -173,12 +173,12 @@ export default function Player(room: any) {
   const exitFullscreen = () => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
+    } else if ((document as any).webkitExitFullscreen) {
       /* Safari */
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
+      (document as any).webkitExitFullscreen();
+    } else if ((document as any).msExitFullscreen) {
       /* IE11 */
-      document.msExitFullscreen();
+      (document as any).msExitFullscreen();
     }
   };
 
